@@ -1,10 +1,11 @@
 import express from "express";
 import cookieParser from "cookie-parser";
 import cors from "cors";
-import dotenv from 'dotenv'
+import dotenv from "dotenv";
 import connectDB from "./utils/db.js";
-import router from "./routes/user.route.js";
-dotenv.config({})
+import userRoute from "./routes/user.route.js";
+import companyRoute from "./routes/comapny.route.js";
+dotenv.config({});
 const app = express();
 
 // middleware
@@ -22,16 +23,17 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 
-app.get('/',(req,res)=>{
-  res.send("hello")
-})
+app.get("/", (req, res) => {
+  res.send("hello");
+});
 
 // api's
 
-app.use("/api/users",router)
+app.use("/api/users", userRoute);
+app.use("/api/company", companyRoute);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-  connectDB()
+  connectDB();
   console.log(`Server is running on port ${PORT}`);
 });
