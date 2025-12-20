@@ -1,0 +1,1 @@
+import {Application} from '../models/application.model.js'

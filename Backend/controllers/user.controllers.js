@@ -146,9 +146,15 @@ export const updateProfile = async(req,res)=>{
       if (fullname) {        
         user.fullname = fullname
       }
-      if (email) {        
-        user.email = email
+
+      if (email && email !== user.email) {
+          const emailExists = await User.findOne({ email });
+      if (emailExists) {
+          return res.status(400).json({ message: "Email already exists", success: false });
       }
+          user.email = email;  // Update email if it's unique
+      }
+      
       if (phoneNumber) {        
         user.phoneNumber = phoneNumber
       }
