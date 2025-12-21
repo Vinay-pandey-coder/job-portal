@@ -32,7 +32,7 @@ export const applyjobs = async (req, res) => {
     }
 
     // create new application
-  const newApplication = await Application.create({
+    const newApplication = await Application.create({
       job: jobId,
       applicant: userId,
     });
@@ -68,7 +68,6 @@ export const getAppliedJobs = async (req, res) => {
   }
 };
 
-
 // total apply candidate
 export const getApplicants = async (req, res) => {
   try {
@@ -79,26 +78,27 @@ export const getApplicants = async (req, res) => {
       populate: { path: "applicant", options: { sort: { createdAt: -1 } } },
     });
     if (!job) {
-      return res.status(404).json({message:"Job not found",success:false})
+      return res.status(404).json({ message: "Job not found", success: false });
     }
-    return res.status(200).json({job,success:true})
+    return res.status(200).json({ job, success: true });
   } catch (error) {
     console.log(error);
   }
 };
 
-
 // application accept,reject,pending
 export const updateStatus = async (req, res) => {
   try {
-    const {status} =req.params
-    const applicationId = req.params.id
+    const { status } = req.body;
+    const applicationId = req.params.id;
     if (!status) {
-      return res.status(404).json({message:"status is required",success:false})
+      return res
+        .status(404)
+        .json({ message: "status is required", success: false });
     }
 
-//  find the application by applicant id
-    const application = await Application.findById({ _id:applicationId})
+    //  find the application by applicant id
+    const application = await Application.findById({ _id: applicationId });
     if (!application) {
       return res.status(404).json({
         message: "Application not found.",
@@ -106,7 +106,7 @@ export const updateStatus = async (req, res) => {
       });
     }
 
-// update the status
+    // update the status
     application.status = status.toLowerCase();
     await application.save();
 
@@ -114,6 +114,6 @@ export const updateStatus = async (req, res) => {
       .status(200)
       .json({ message: "Application status updated", success: true });
   } catch (error) {
-    console.log(error)
+    console.log(error);
   }
-}
+};
