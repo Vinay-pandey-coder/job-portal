@@ -1,53 +1,68 @@
 import mongoose from "mongoose";
 
-const userSchema = new mongoose.Schema({
-  fullname: {
-    type: String,
-    required: true,
-  },
-  email: {
-    type: String,
-    required: true,
-    unique: true,
-  },
-  phoneNumber: {
-    type: String,
-    required: true,
-    unique: true,
-  },
-  password: {
-    type: String,
-    required: true,
-  },
-  role: {
-    type: String,
-    enum: ["Student", "Recruiter"],
-    default: "Student",
-    required: true,
-  },
-  profile: {
-    bio: {
+const userSchema = new mongoose.Schema(
+  {
+    fullname: {
       type: String,
+      required: true,
     },
-    skills:[{
-      type:String
-    }],
-    resume:{ // URL to resume file from databse
-      type:String
+    email: {
+      type: String,
+      required: true,
+      unique: true,
     },
-    resumeOriginal:{
-      type:String // Original name of resume file
+    phoneNumber: {
+      type: String,
+      required: true,
+      unique: true,
     },
-    company:{
-      type:mongoose.Schema.Types.ObjectId,
-      ref:'Company'
+    password: {
+      type: String,
+      required: true,
     },
-    profilePhoto:{
-      type:String, // URL to profile photo file
-      default:''
-    }
+    // pancard: {
+    //   type: String,
+    //   required: true,
+    //   unique: true,
+    // },
+    // adharcard: {
+    //   type: String,
+    //   required: true,
+    //   unique: true,
+    // },
+    role: {
+      type: String,
+      enum: ["Student", "Recruiter"],
+      default: "Student",
+      required: true,
+    },
+    profile: {
+      bio: {
+        type: String,
+      },
+      skills: [
+        {
+          type: String,
+        },
+      ],
+      resume: {
+        // URL to resume file from databse
+        type: String,
+      },
+      resumeOriginal: {
+        type: String, // Original name of resume file
+      },
+      company: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Company",
+      },
+      profilePhoto: {
+        type: String, // URL to profile photo file
+        default: "",
+      },
+    },
   },
-},{timestamps:true});
+  { timestamps: true }
+);
 
-
-export const User = mongoose.model('User',userSchema)
+export const User = mongoose.model("User", userSchema);
