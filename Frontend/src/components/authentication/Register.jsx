@@ -3,7 +3,10 @@ import Navbar from "../components_lite/Navbar";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { RadioGroup } from "../ui/radio-group";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
+import { USER_API_ENDPOINT } from "../../utils/data";
+import { toast } from "sonner";
 
 const Register = () => {
   const [input, setInput] = useState({
@@ -17,6 +20,8 @@ const Register = () => {
     file: "",
   });
 
+  const navigate = useNavigate();
+
   const changeEventHandler = (e) => {
     setInput({ ...input, [e.target.name]: e.target.value });
   };
@@ -27,7 +32,35 @@ const Register = () => {
 
   const submitHandler = async (e) => {
     e.preventDefault();
-    console.log(input);
+    const formData = new FormData();
+    formData.append("fullname", input.fullname);
+    formData.append("email", input.email);
+    formData.append("password", input.password);
+    formData.append("pancard", input.pancard);
+    formData.append("adharcard", input.adharcard);
+    formData.append("role", input.role);
+    formData.append("phoneNumber", input.phoneNumber);
+    if (input.file) {
+      formData.append("file", input.file);
+    }
+    try {
+      const res = await axios.post(`${USER_API_ENDPOINT}/register`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+        withCredentials: true,
+      });
+      if (res.data.success) {
+        navigate("/login");
+        toast.success(res.data.message);
+      }
+    } catch (error) {
+      console.log(error);
+      const errorMessage = error.response
+        ? error.response.data.message
+        : "An unexpected error occurred.";
+      toast.error(errorMessage);
+    }
   };
 
   return (
@@ -79,7 +112,6 @@ const Register = () => {
             />
           </div>
 
-          
           {/* <div className="space-y-1 mb-4">
             <Label>PAN Card Number</Label>
             <Input
@@ -102,7 +134,7 @@ const Register = () => {
             ></Input>
           </div> */}
 
-            {/* Phone */}
+          {/* Phone */}
           <div className="space-y-1 mb-4">
             <Label>Phone Number</Label>
             <Input
@@ -156,7 +188,7 @@ const Register = () => {
           {/* Button */}
           <button
             type="submit"
-            className="w-full py-2 rounded-md text-white bg-blue-600 hover:bg-blue-700 transition"
+            className="w-full py-2 rounded-md text-white bg-blue-600 hover:bg-blue-700 transition cursor-pointer"
           >
             Register
           </button>

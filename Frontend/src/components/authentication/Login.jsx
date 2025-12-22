@@ -3,9 +3,13 @@ import Navbar from "../components_lite/Navbar";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { RadioGroup } from "../ui/radio-group";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
+import { toast } from "sonner";
+import { USER_API_ENDPOINT } from "../../utils/data";
 
 const Login = () => {
+  const navigate = useNavigate();
   const [input, setInput] = useState({
     email: "",
     password: "",
@@ -18,8 +22,26 @@ const Login = () => {
 
   const submitHandler = async (e) => {
     e.preventDefault();
-    console.log(input)
+    try {
+      const res = await axios.post(`${USER_API_ENDPOINT}/login`, input, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        withCredentials: true,
+      });
+      if (res.data.success) {
+        navigate("/");
+        toast.success(res.data.message);
+      }
+    } catch (error) {
+      console.log(error);
+      const errorMessage = error.response
+        ? error.response.data.message
+        : "An unexpected error occurred.";
+      toast.error(errorMessage);
+    }
   };
+
   return (
     <>
       <Navbar />
@@ -48,7 +70,13 @@ const Login = () => {
           {/* Password */}
           <div className="mb-4">
             <Label>Password</Label>
-            <Input type="password" placeholder="Enter your password" />
+            <Input
+              type="password"
+              value={input.password}
+              name="password"
+              onChange={changeEventHandler}
+              placeholder="Enter your password"
+            />
           </div>
 
           {/* Role */}
@@ -77,7 +105,10 @@ const Login = () => {
           </RadioGroup>
 
           {/* Button */}
-          <button type="submit" className="w-full py-3 mt-3 text-white bg-primary hover:bg-primary/90 rounded-md font-medium cursor-pointer">
+          <button
+            type="submit"
+            className="w-full py-3 mt-3 text-white bg-primary hover:bg-primary/90 rounded-md font-medium cursor-pointer"
+          >
             Login
           </button>
 
