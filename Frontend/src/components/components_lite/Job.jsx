@@ -7,7 +7,7 @@ import { Badge } from "../ui/badge";
 const Job = () => {
   return (
     <>
-      <div className="p-5 rounded-md bg-white border border-gray-200 cursor-pointer hover:shadow-2xl hover:shadow-blue-200 hover:p-3">
+      <div className="p-5 rounded-md bg-white border border-gray-200 cursor-pointer transition-all duration-300 ease-in-out transform-gpu will-change-transform hover:shadow-2xl hover:shadow-blue-200 hover:scale-105">
         <div className="flex items-center justify-between">
           <p className="text-sm text-gray-600">3 days ago</p>
           <Button

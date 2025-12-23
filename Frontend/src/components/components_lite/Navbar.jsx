@@ -4,9 +4,11 @@ import { Avatar, AvatarImage } from "../ui/avatar";
 import { Button } from "../ui/button";
 import { LogOut, User2 } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const Navbar = () => {
-  const user = false;
+const {user} = useSelector((store)=>store.auth)
+
   return (
     <>
       <div className="bg-white">
@@ -44,7 +46,7 @@ const Navbar = () => {
                 <PopoverTrigger asChild>
                   <Avatar className={"cursor-pointer"}>
                     <AvatarImage
-                      src="https://github.com/evilrabbit.png"
+                      src="https://avatars.githubusercontent.com/u/199726118?v=4"
                       alt="@avilrabbit"
                     />
                   </Avatar>
@@ -68,7 +70,7 @@ const Navbar = () => {
                   <div className="flex my-2 flex-col text-gray-600">
                     <div className="flex w-fit items-center gap-2">
                       <User2 />
-                      <Button variant="link">Profile</Button>
+                      <Button variant="link"><Link to={'/profile'}>Profile</Link></Button>
                     </div>
                     <div className="flex w-fit items-center gap-2">
                       <LogOut />
