@@ -55,7 +55,7 @@ const {user} = useSelector((store)=>store.auth)
                   <div className="flex items-center gap-4 space-y-2">
                     <Avatar className={"cursor-pointer"}>
                       <AvatarImage
-                        src="https://github.com/evilrabbit.png"
+                        src="https://avatars.githubusercontent.com/u/199726118?v=4"
                         alt="@avilrabbit"
                       />
                     </Avatar>
