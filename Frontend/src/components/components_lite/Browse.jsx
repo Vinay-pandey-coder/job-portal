@@ -14,7 +14,7 @@ const Browse = () => {
           {
           randomJobs.map((items,index)=>{
             return (
-              <Job/>
+              <Job key={index}/>
             )
           })
         }

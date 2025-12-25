@@ -49,7 +49,7 @@ const userSchema = new mongoose.Schema(
         // URL to resume file from databse
         type: String,
       },
-      resumeOriginal: {
+      resumeOriginalname: {
         type: String, // Original name of resume file
       },
       company: {

@@ -1,28 +1,18 @@
-import React from "react";
+import React, { useState } from "react";
 import Navbar from "./Navbar";
 import { Avatar, AvatarImage } from "../ui/avatar";
 import { Button } from "../ui/button";
 import { Contact, Mail, Pen } from "lucide-react";
 import { Badge } from "../ui/badge";
 import AppliedJob from "./AppliedJob";
+import EditProfileModel from "./EditProfileModel";
+import { useSelector } from "react-redux";
 
-const skills = [
-  "React",
-  "JavaScript",
-  "HTML",
-  "CSS",
-  "Python",
-  "Node.js",
-  "MongoDB",
-  "MySQL",
-  "Redux",
-  "Tailwind CSS",
-  "Docker",
-  "Kubernetes",
-];
-
+const isResume = true;
 const Profile = () => {
-  const isHaveResume = true;
+  const [open, setOpen] = useState(false);
+  const { user } = useSelector((store) => store.auth);
+
   return (
     <>
       <div>
@@ -41,23 +31,31 @@ const Profile = () => {
                 />
               </Avatar>
               <div>
-                <h1 className="font-medium text-xl">Full Name</h1>
-                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+                <h1 className=" font-medium text-xl">{user?.fullname}</h1>
+                <p>{user?.profile?.bio}</p>
               </div>
             </div>
-            <Button className={"text-right cursor-pointer"} variant="outline">
+            <Button
+              onClick={() => setOpen(true)}
+              className={"text-right cursor-pointer"}
+              variant="outline"
+            >
               <Pen />
             </Button>
           </div>
 
-          <div className=" my-5">
+          <div className="my-5">
             <div className="flex items-center gap-3 my-2">
               <Mail />
-              <span className="">abhi837688@gmail.com</span>
+              <span className="">
+                <a href={`mailto:${user?.email}`}>{user?.email}</a>
+              </span>
             </div>
             <div className="flex items-center gap-3 my-2">
               <Contact />
-              <span className="">+91 8076936158</span>
+              <span className="">
+                <a href={`tel:${user?.phoneNumber}`}>{user?.phoneNumber}</a>
+              </span>
             </div>
           </div>
 
@@ -65,8 +63,10 @@ const Profile = () => {
             <div className="my-5">
               <h1>Skills</h1>
               <div className="flex items-center gap-1">
-                {skills.length !== 0 ? (
-                  skills.map((item, index) => <Badge key={index}>{item}</Badge>)
+                {user?.profile?.skills.length !== 0 ? (
+                  user?.profile?.skills.map((item, index) => (
+                    <Badge key={index}>{item}</Badge>
+                  ))
                 ) : (
                   <span>NA</span>
                 )}
@@ -79,19 +79,17 @@ const Profile = () => {
             <div className="grid w-full max-w-sm items-center gap-1.5">
               <label className="text-md font-bold"> Resume</label>
               <div>
-                {isHaveResume ? (
-                  <Button variant="outline">
-                    <a
-                      className="cursor-pointer text-blue-600 hover:underline"
-                      target="_blank"
-                      href="http://resume.com"
-                      download="resume.pdf"
-                    >
-                      Download
-                    </a>
-                  </Button>
+                {isResume ? (
+                  <a
+                    target="_blank"
+                    href={user?.profile?.resume}
+                    className="text-blue-600 hover:underline cursor-pointer"
+                  >
+                    Download
+                    {user?.profile?.resumeOriginalName}
+                  </a>
                 ) : (
-                  <span>No Reusme Found</span>
+                  <span>No Resume Found</span>
                 )}
               </div>
             </div>
@@ -102,6 +100,8 @@ const Profile = () => {
 
           {/* Application Table */}
           <AppliedJob />
+          {/* EditProfileModel Table */}
+          <EditProfileModel open={open} setOpen={setOpen} />
         </div>
       </div>
     </>

@@ -12,7 +12,7 @@ const LatestJobs = () => {
 
         <div className="grid grid-cols-3 gap-4 my-5">
           {rendomJob.slice(0, 6).map((job, ind) => (
-            <JobCards ></JobCards>
+            <JobCards key={ind} ></JobCards>
           ))}
         </div>
       </div>
