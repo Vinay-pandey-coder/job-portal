@@ -3,11 +3,30 @@ import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { Avatar, AvatarImage } from "../ui/avatar";
 import { Button } from "../ui/button";
 import { LogOut, User2 } from "lucide-react";
-import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { toast } from "sonner";
+import axios from "axios";
+import { USER_API_ENDPOINT } from "../../utils/data";
+import { setUser } from "../../redux/authSlice";
 
 const Navbar = () => {
-const {user} = useSelector((store)=>store.auth)
+  const { user } = useSelector((store) => store.auth);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const logoutHandler = async () => {
+    try {
+      const response = await axios.post(`${USER_API_ENDPOINT}/logout`);
+      if (response.data.message) {
+        dispatch(setUser(null));
+        navigate("/");
+        toast.success("Logged out successfuly");
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error(error.response.data.message);
+    }
+  };
 
   return (
     <>
@@ -21,9 +40,9 @@ const {user} = useSelector((store)=>store.auth)
 
           <div className="left flex items-center gap-5">
             <ul className="flex font-medium items-center gap-6 cursor-pointer">
-              <Link to={'/'}>Home</Link>
-              <Link to={'/Browser'}>Browse</Link>
-              <Link to={'/Jobs'}>Job</Link>
+              <Link to={"/"}>Home</Link>
+              <Link to={"/Browser"}>Browse</Link>
+              <Link to={"/Jobs"}>Job</Link>
             </ul>
 
             {!user ? (
@@ -46,7 +65,7 @@ const {user} = useSelector((store)=>store.auth)
                 <PopoverTrigger asChild>
                   <Avatar className={"cursor-pointer"}>
                     <AvatarImage
-                      src="https://avatars.githubusercontent.com/u/199726118?v=4"
+                      src={user?.profile?.profilePhoto}
                       alt="@avilrabbit"
                     />
                   </Avatar>
@@ -55,26 +74,29 @@ const {user} = useSelector((store)=>store.auth)
                   <div className="flex items-center gap-4 space-y-2">
                     <Avatar className={"cursor-pointer"}>
                       <AvatarImage
-                        src="https://avatars.githubusercontent.com/u/199726118?v=4"
+                        src={user?.profile?.profilePhoto}
                         alt="@avilrabbit"
                       />
                     </Avatar>
                     <div>
-                      <h3 className="font-medium">Vinay Pandey</h3>
+                      <h3 className="font-medium">{user?.fullname}</h3>
                       <p className="text-sm text-muted-foreground">
-                        Lorem ipsum dolor, sit amet consectetur adipisicing
-                        elit. Dolorum, excepturi.
+                        {user?.profile?.bio}
                       </p>
                     </div>
                   </div>
                   <div className="flex my-2 flex-col text-gray-600">
                     <div className="flex w-fit items-center gap-2">
                       <User2 />
-                      <Button variant="link"><Link to={'/profile'}>Profile</Link></Button>
+                      <Button variant="link">
+                        <Link to={"/profile"}>Profile</Link>
+                      </Button>
                     </div>
                     <div className="flex w-fit items-center gap-2">
                       <LogOut />
-                      <Button variant="link">Logout</Button>
+                      <Button onClick={logoutHandler} variant="link">
+                        Logout
+                      </Button>
                     </div>
                   </div>
                 </PopoverContent>
