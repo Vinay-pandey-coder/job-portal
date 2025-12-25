@@ -47,8 +47,14 @@ const Profile = () => {
           <div className="my-5">
             <div className="flex items-center gap-3 my-2">
               <Mail />
-              <span className="">
-                <a href={`mailto:${user?.email}`}>{user?.email}</a>
+              <span>
+                <a
+                  href={`https://mail.google.com/mail/?view=cm&to=${user?.email}`}
+                  target="_blank"
+                  className="text-blue-600"
+                >
+                  {user?.email}
+                </a>
               </span>
             </div>
             <div className="flex items-center gap-3 my-2">
