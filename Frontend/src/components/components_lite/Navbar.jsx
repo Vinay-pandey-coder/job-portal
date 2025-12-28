@@ -40,9 +40,28 @@ const Navbar = () => {
 
           <div className="left flex items-center gap-5">
             <ul className="flex font-medium items-center gap-6 cursor-pointer">
-              <Link to={"/"}>Home</Link>
-              <Link to={"/Browser"}>Browse</Link>
-              <Link to={"/Jobs"}>Job</Link>
+              {user && user.role === "Recruiter" ? (
+                <>
+                  <li>
+                    <Link to={"/admin/companies"}>Companies</Link>
+                  </li>
+                  <li>
+                    <Link to={"/admin/jobs"}>Jobs</Link>
+                  </li>
+                </>
+              ) : (
+                <>
+                  <li>
+                    <Link to={"/"}>Home</Link>
+                  </li>
+                  <li>
+                    <Link to={"/Browser"}>Browse</Link>
+                  </li>
+                  <li>
+                    <Link to={"/Jobs"}>Job</Link>
+                  </li>
+                </>
+              )}
             </ul>
 
             {!user ? (
@@ -86,12 +105,15 @@ const Navbar = () => {
                     </div>
                   </div>
                   <div className="flex my-2 flex-col text-gray-600">
-                    <div className="flex w-fit items-center gap-2">
-                      <User2 />
-                      <Button variant="link">
-                        <Link to={"/profile"}>Profile</Link>
-                      </Button>
-                    </div>
+                    {user && user.role === "Student" && (
+                      <div className="flex w-fit items-center gap-2">
+                        <User2 />
+                        <Button variant="link">
+                          <Link to={"/profile"}>Profile</Link>
+                        </Button>
+                      </div>
+                    )}
+
                     <div className="flex w-fit items-center gap-2">
                       <LogOut />
                       <Button onClick={logoutHandler} variant="link">

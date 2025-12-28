@@ -19,9 +19,9 @@ const Description = () => {
   const { user } = useSelector((store) => store.auth);
 
   const isIntiallyApplied =
-  singleJob?.application?.some(
-    (application) => application.applicant === user?._id
-  ) || false;
+    singleJob?.application?.some(
+      (application) => application.applicant === user?._id
+    ) || false;
   const [isApplyed, setIsApplyed] = useState(isIntiallyApplied);
 
   const applyJobHandler = async () => {
@@ -33,11 +33,17 @@ const Description = () => {
         }
       );
       if (res.data.success) {
-        setIsApplyed(true)
-        const updateSinglejob = {...singleJob,applications:[...singleJob.applications,{
-          applicant:user?._id
-        }]}
-        dispatch(setSingleJob(updateSinglejob))
+        setIsApplyed(true);
+        const updateSinglejob = {
+          ...singleJob,
+          applications: [
+            ...singleJob.applications,
+            {
+              applicant: user?._id,
+            },
+          ],
+        };
+        dispatch(setSingleJob(updateSinglejob));
         console.log(res.data);
         toast.success(res.data.message);
       }
@@ -58,9 +64,13 @@ const Description = () => {
 
         if (res.data.status) {
           dispatch(setSingleJob(res.data.job));
-          setIsApplyed(res.data.job.applications.some(applications => applications.applicant === user?._id))
-        }else{
-          setError("Failed to fetch jobs.")
+          setIsApplyed(
+            res.data.job.applications.some(
+              (applications) => applications.applicant === user?._id
+            )
+          );
+        } else {
+          setError("Failed to fetch jobs.");
         }
         console.log(res.data.job);
       } catch (error) {
@@ -164,7 +174,9 @@ const Description = () => {
             <h1 className="font-bold my-1 ">
               Post Date:
               <span className="pl-4 font-normal text-gray-800">
-                {singleJob?.createdAt.split("T")[0]}
+                {singleJob?.createdAt
+                  ? singleJob.createdAt.split("T")[0]
+                  : "N/A"}
               </span>
             </h1>
           </div>

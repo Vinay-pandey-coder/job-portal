@@ -52,28 +52,28 @@ const Job = ({ job }) => {
             </Avatar>
           </Button>
           <div>
-            <h1 className="text-lg font-medium">{company?.name}</h1>
+            <h1 className="text-lg font-medium">{job?.company?.name}</h1>
             <p className="text-sm text-gray-600">India</p>
           </div>
         </div>
 
         <div>
           <div>
-            <h2 className="font-bold text-lg my-2">{title}</h2>
-            <p className="text-sm text-gray-600">{description}</p>
+            <h2 className="font-bold text-lg my-2">{job?.title}</h2>
+            <p className="text-sm text-gray-600">{job?.description}</p>
           </div>
           <div className="flex gap-2 items-center mt-4">
             <Badge className={"text-blue-700 font-bold"} variant={"ghost"}>
-              {position} Positions
+              {job?.position} Positions
             </Badge>
             <Badge className={"text-[#E35B14] font-bold"} variant={"ghost"}>
-              {salary}
+              {job?.salary}
             </Badge>
             <Badge className={"text-[#6B3AC2] font-bold"} variant={"ghost"}>
-              {location}
+              {job?.location}
             </Badge>
             <Badge className={"text-black font-bold"} variant={"ghost"}>
-              {jobType}
+              {job?.jobType}
             </Badge>
           </div>
         </div>
@@ -81,7 +81,7 @@ const Job = ({ job }) => {
         <div className="flex items-center gap-4 mt-4">
           <Button
             onClick={() => {
-              navigate(`/description/${_id}`);
+              navigate(`/description/${job?._id}`);
             }}
             variant="outline"
             className={"rounded-sm cursor-pointer font-bold"}
