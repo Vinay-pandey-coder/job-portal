@@ -15,6 +15,7 @@ import {
   PURGE,
   REGISTER,
 } from "redux-persist";
+import { applicationSliceReducer } from "./applications";
 const persistConfig = {
   key: "root",
   version: 1,
@@ -26,6 +27,7 @@ const rootReducer = combineReducers({
   job: jobSlice,
   jobs: jobReducer,
   company: companySlice, 
+  application:applicationSliceReducer
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
