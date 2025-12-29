@@ -49,40 +49,44 @@ const FilterCard = () => {
   };
 
   return (
-    <div className="w-full">
-      <h1 className="font-bold text-lg">Filter Jobs</h1>
-      <hr className="my-3" />
+    <>
+        <div className="w-full">
+          <h1 className="font-bold text-lg">Filter Jobs</h1>
+          <hr className="my-3" />
 
-      {filterData.map((data, i) => (
-        <div key={i} className="mb-4">
-          
-          <h2
-            onClick={() => handleClick(data.filterType)}
-            className="font-bold text-md cursor-pointer flex justify-between items-center"
-          >
-            {data.filterType}
-            <span>{activeFilter === data.filterType ? "-" : "+"}</span>
-          </h2>
+          {filterData.map((data, i) => (
+            <div key={i} className="mb-4">
+              <h2
+                onClick={() => handleClick(data.filterType)}
+                className="font-bold text-md cursor-pointer flex justify-between items-center"
+              >
+                {data.filterType}
+                <span>{activeFilter === data.filterType ? "-" : "+"}</span>
+              </h2>
 
-          {/* RADIO GROUP */}
-          {activeFilter === data.filterType && (
-            <RadioGroup className="mt-2">
-              {data.array.map((item, idx) => {
-                const id = `${data.filterType}-${idx}`;
-                return (
-                  <div key={id} className="flex items-center space-x-2 my-1">
-                    <RadioGroupItem value={item} id={id} />
-                    <label htmlFor={id} className="cursor-pointer">
-                      {item}
-                    </label>
-                  </div>
-                );
-              })}
-            </RadioGroup>
-          )}
+              {/* RADIO GROUP */}
+              {activeFilter === data.filterType && (
+                <RadioGroup className="mt-2">
+                  {data.array.map((item, idx) => {
+                    const id = `${data.filterType}-${idx}`;
+                    return (
+                      <div
+                        key={id}
+                        className="flex items-center space-x-2 my-1"
+                      >
+                        <RadioGroupItem value={item} id={id} />
+                        <label htmlFor={id} className="cursor-pointer">
+                          {item}
+                        </label>
+                      </div>
+                    );
+                  })}
+                </RadioGroup>
+              )}
+            </div>
+          ))}
         </div>
-      ))}
-    </div>
+    </>
   );
 };
 

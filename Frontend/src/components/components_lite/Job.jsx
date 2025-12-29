@@ -48,7 +48,7 @@ const Job = ({ job }) => {
         <div className="flex items-center gap-2 my-2">
           <Button className={"p-6"} variant="outline" size="icon">
             <Avatar>
-              <AvatarImage src="https://images.seeklogo.com/logo-png/25/2/microsoft-logo-png_seeklogo-258454.png" />
+              <AvatarImage src={job?.company?.logo} />
             </Avatar>
           </Button>
           <div>
@@ -62,12 +62,12 @@ const Job = ({ job }) => {
             <h2 className="font-bold text-lg my-2">{job?.title}</h2>
             <p className="text-sm text-gray-600">{job?.description}</p>
           </div>
-          <div className="flex gap-2 items-center mt-4">
+          <div className="flex flex-wrap gap-2 items-center mt-4">
             <Badge className={"text-blue-700 font-bold"} variant={"ghost"}>
-              {job?.position} Positions
+              {job?.position} Open Positions
             </Badge>
             <Badge className={"text-[#E35B14] font-bold"} variant={"ghost"}>
-              {job?.salary}
+              {job?.salary} LPA
             </Badge>
             <Badge className={"text-[#6B3AC2] font-bold"} variant={"ghost"}>
               {job?.location}

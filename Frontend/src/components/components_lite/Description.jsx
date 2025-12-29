@@ -87,6 +87,7 @@ const Description = () => {
   if (!singleJob) {
     return <div>Loading...</div>;
   }
+  
 
   return (
     <>
@@ -103,7 +104,7 @@ const Description = () => {
                   className={" text-[#FA4F09] font-bold"}
                   variant={"ghost"}
                 >
-                  {singleJob?.salary}
+                   {singleJob?.salary} LPA
                 </Badge>
                 <Badge
                   className={" text-[#6B3AC2]  font-bold"}
@@ -150,7 +151,7 @@ const Description = () => {
             <h1 className="font-bold my-1 ">
               Salary:{" "}
               <span className=" pl-4 font-normal text-gray-800">
-                {singleJob?.salary}
+                {singleJob?.salary} LPA
               </span>
             </h1>
             <h1 className="font-bold my-1 ">
