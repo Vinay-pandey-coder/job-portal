@@ -7,38 +7,40 @@ import { useDispatch } from "react-redux";
 import { setSearchJobByText } from "../../redux/jobslice";
 import AdminJobTable from "./AdminJobTable";
 import useGetAlladminjob from "../../hooks/useGetAlladminjob";
-const AdminJobs = () => {
-  useGetAlladminjob()
-  const navigate = useNavigate();
 
-  const [input, setInput] = useState("");
+const AdminJobs = () => {
+  useGetAlladminjob();
+
+  const navigate = useNavigate();
   const dispatch = useDispatch();
+  const [input, setInput] = useState("");
+
+  // Update search query in Redux store when input changes
   useEffect(() => {
     dispatch(setSearchJobByText(input));
-  }, [input]);
+  }, [input, dispatch]);
 
   return (
     <>
       <Navbar />
-      <div>
-        <div className="max-w-6xl mx-auto my-10">
-          <div className="flex items-center justify-between my-5">
-            <Input
-              className="w-fit"
-              placeholder="Filter by Name & Jobs"
-              onChange={(e) => setInput(e.target.value)}
-            ></Input>
-            <Button
-              onClick={() => navigate("/admin/jobs/create")}
-              className="cursor-pointer"
-            >
-              Post New Job
-            </Button>
-          </div>
-          <div>
-            <AdminJobTable />
-          </div>
+
+      <div className="max-w-6xl mx-auto my-10">
+        <div className="flex flex-col md:flex-row items-center justify-between my-5 gap-4">
+          <Input
+            className="w-full md:w-1/2"
+            placeholder="Filter by Name & Jobs"
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+          />
+          <Button
+            onClick={() => navigate("/admin/jobs/create")}
+            className="cursor-pointer"
+          >
+            Post New Job
+          </Button>
         </div>
+
+        <AdminJobTable />
       </div>
     </>
   );

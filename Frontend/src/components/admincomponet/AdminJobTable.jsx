@@ -23,9 +23,7 @@ const AdminJobTable = () => {
     const filteredJobs =
       allAdminJobs.length >= 0 &&
       allAdminJobs.filter((job) => {
-        if (!searchJobByText) {
-          return true;
-        }
+        if (!searchJobByText) return true;
         return (
           job.title?.toLowerCase().includes(searchJobByText.toLowerCase()) ||
           job?.company?.name
@@ -87,7 +85,7 @@ const AdminJobTable = () => {
                           }
                           className="flex items-center gap-2 w-fit cursor-pointer mt-1"
                         >
-                          <Eye className="w-4"></Eye>
+                          <Eye className="w-4" />
                           <span>Applicant</span>
                         </div>
                       </PopoverContent>

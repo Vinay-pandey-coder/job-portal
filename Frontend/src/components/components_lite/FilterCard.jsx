@@ -1,5 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
+import { useDispatch } from "react-redux";
+import { setSearchedQuery } from "../../redux/jobslice";
 
 const filterData = [
   {
@@ -41,53 +43,82 @@ const filterData = [
   },
 ];
 
-const FilterCard = () => {
+const Filter = () => {
+  const dispatch = useDispatch();
   const [activeFilter, setActiveFilter] = useState(null);
+  const [selectedValue, setSelectedValue] = useState("");
 
-  const handleClick = (filterType) => {
+  const handleToggle = (filterType) => {
     setActiveFilter(activeFilter === filterType ? null : filterType);
   };
 
+  const handleChange = (value) => {
+    setSelectedValue(value);
+  };
+
+  useEffect(() => {
+    dispatch(setSearchedQuery(selectedValue));
+  }, [selectedValue, dispatch]);
+
   return (
-    <>
-        <div className="w-full">
-          <h1 className="font-bold text-lg">Filter Jobs</h1>
-          <hr className="my-3" />
+    <div
+      className="
+        w-full lg:w-60
+        bg-white rounded-md p-4
+        border border-gray-200
+        shadow-sm
+      "
+    >
+      <h1 className="font-bold text-base sm:text-lg">Filter Jobs</h1>
+      <hr className="my-3" />
 
-          {filterData.map((data, i) => (
-            <div key={i} className="mb-4">
-              <h2
-                onClick={() => handleClick(data.filterType)}
-                className="font-bold text-md cursor-pointer flex justify-between items-center"
-              >
-                {data.filterType}
-                <span>{activeFilter === data.filterType ? "-" : "+"}</span>
-              </h2>
+      <RadioGroup value={selectedValue} onValueChange={handleChange}>
+        {filterData.map((data, index) => (
+          <div key={index} className="mb-4">
+            {/* Filter Heading */}
+            <h2
+              onClick={() => handleToggle(data.filterType)}
+              className="
+                font-semibold text-sm sm:text-md
+                cursor-pointer flex justify-between items-center
+              "
+            >
+              {data.filterType}
+              <span className="text-lg">
+                {activeFilter === data.filterType ? "-" : "+"}
+              </span>
+            </h2>
 
-              {/* RADIO GROUP */}
-              {activeFilter === data.filterType && (
-                <RadioGroup className="mt-2">
-                  {data.array.map((item, idx) => {
-                    const id = `${data.filterType}-${idx}`;
-                    return (
-                      <div
-                        key={id}
-                        className="flex items-center space-x-2 my-1"
+            {/* Filter Options */}
+            {activeFilter === data.filterType && (
+              <div className="mt-2">
+                {data.array.map((item, indx) => {
+                  const id = `${data.filterType}-${indx}`;
+                  return (
+                    <div
+                      key={id}
+                      className="
+                        flex items-center space-x-2
+                        my-2 ml-2 text-sm
+                      "
+                    >
+                      <RadioGroupItem value={item} id={id} />
+                      <label
+                        htmlFor={id}
+                        className="cursor-pointer select-none"
                       >
-                        <RadioGroupItem value={item} id={id} />
-                        <label htmlFor={id} className="cursor-pointer">
-                          {item}
-                        </label>
-                      </div>
-                    );
-                  })}
-                </RadioGroup>
-              )}
-            </div>
-          ))}
-        </div>
-    </>
+                        {item}
+                      </label>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+        ))}
+      </RadioGroup>
+    </div>
   );
 };
 
-export default FilterCard;
+export default Filter;

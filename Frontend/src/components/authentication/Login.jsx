@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Navbar from "../components_lite/Navbar";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
@@ -9,10 +9,15 @@ import { toast } from "sonner";
 import { USER_API_ENDPOINT } from "../../utils/data";
 import { useDispatch, useSelector } from "react-redux";
 import { setLoading, setUser } from "../../redux/authSlice";
+import { Loader2 } from "lucide-react";
+import { Button } from "../ui/button";
 
 const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const { loading, user } = useSelector((store) => store.auth);
+
   const [input, setInput] = useState({
     email: "",
     password: "",
@@ -23,27 +28,37 @@ const Login = () => {
     setInput({ ...input, [e.target.name]: e.target.value });
   };
 
-  const { loading } = useSelector((store) => store.auth);
+  useEffect(() => {
+    if (user) {
+      navigate("/");
+    }
+  }, [user, navigate]);
+
   const submitHandler = async (e) => {
     e.preventDefault();
+
+    if (!input.email || !input.password || !input.role) {
+      toast.error("Please fill all fields and select a role.");
+      return;
+    }
+
     try {
       dispatch(setLoading(true));
       const res = await axios.post(`${USER_API_ENDPOINT}/login`, input, {
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         withCredentials: true,
       });
+
       if (res.data.success) {
         dispatch(setUser(res.data.user));
-        navigate("/");
         toast.success(res.data.message);
+        navigate("/");
       }
     } catch (error) {
       console.log(error);
-      toast.error("Login failed");
+      toast.error(error?.response?.data?.message || "Login failed");
     } finally {
-      dispatch(setLoading(false)); // End loading
+      dispatch(setLoading(false));
     }
   };
 
@@ -51,7 +66,7 @@ const Login = () => {
     <>
       <Navbar />
 
-      <div className="flex items-center justify-center py-10">
+      <div className="flex items-center justify-center py-10 px-4">
         <form
           onSubmit={submitHandler}
           className="w-full max-w-md border border-gray-300 rounded-lg p-6 bg-white shadow-sm"
@@ -69,6 +84,7 @@ const Login = () => {
               name="email"
               onChange={changeEventHandler}
               placeholder="Enter your email"
+              required
             />
           </div>
 
@@ -81,48 +97,35 @@ const Login = () => {
               name="password"
               onChange={changeEventHandler}
               placeholder="Enter your password"
+              required
             />
           </div>
 
           {/* Role */}
           <RadioGroup className="flex items-center gap-6 my-5">
-            <div className="flex items-center gap-2">
-              <Input
-                type="radio"
-                name="role"
-                value="Student"
-                checked={input.role === "Student"}
-                onChange={changeEventHandler}
-              />
-              <Label>Student</Label>
-            </div>
-
-            <div className="flex items-center gap-2">
-              <Input
-                type="radio"
-                name="role"
-                value="Recruiter"
-                checked={input.role === "Recruiter"}
-                onChange={changeEventHandler}
-              />
-              <Label>Recruiter</Label>
-            </div>
+            {["Student", "Recruiter"].map((role) => (
+              <div key={role} className="flex items-center gap-2">
+                <Input
+                  type="radio"
+                  name="role"
+                  value={role}
+                  checked={input.role === role}
+                  onChange={changeEventHandler}
+                  required
+                />
+                <Label>{role}</Label>
+              </div>
+            ))}
           </RadioGroup>
 
-          {loading ? (
-            <div className="flex items-center justify-center my-10">
-              <div className="spinner-border text-blue-600" role="status">
-                <span className="sr-only">Loading...</span>
-              </div>
-            </div>
-          ) : (
-            <button
-              type="submit"
-              className="w-3/4 py-3 my-3 text-white flex items-center justify-center max-w-7xl mx-auto bg-blue-600 hover:bg-blue-800/90 rounded-md cursor-pointer"
-            >
-              Login
-            </button>
-          )}
+          {/* Submit */}
+          <Button
+            type="submit"
+            className="w-full py-3 my-3 flex items-center justify-center"
+            disabled={loading}
+          >
+            {loading ? <Loader2 className="mr-2 h-5 w-5 animate-spin" /> : "Login"}
+          </Button>
 
           {/* Register link */}
           <p className="text-gray-500 text-sm mt-4 text-center">
