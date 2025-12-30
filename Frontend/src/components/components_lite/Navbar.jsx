@@ -32,7 +32,6 @@ const Navbar = () => {
   return (
     <div className="bg-white border-b">
       <div className="flex items-center justify-between mx-auto max-w-7xl h-16 px-4">
-
         {/* Logo */}
         <h1 className="text-2xl font-bold text-[#6B3AC2]">
           Job <span className="text-[#E35B14]">Portal</span>
@@ -101,10 +100,7 @@ const Navbar = () => {
         </div>
 
         {/* Mobile Menu Button */}
-        <button
-          className="md:hidden"
-          onClick={() => setOpen(!open)}
-        >
+        <button className="md:hidden" onClick={() => setOpen(!open)}>
           {open ? <X /> : <Menu />}
         </button>
       </div>
@@ -122,13 +118,20 @@ const Navbar = () => {
               <Link to="/">Home</Link>
               <Link to="/Browser">Browse</Link>
               <Link to="/Jobs">Jobs</Link>
+              {user?.role === "Student" && (
+                <Link to="/profile">Profile</Link>
+              )}
             </>
           )}
 
           {!user ? (
             <div className="flex gap-2">
-              <Link to="/register"><Button>Register</Button></Link>
-              <Link to="/login"><Button variant="outline">Login</Button></Link>
+              <Link to="/register">
+                <Button>Register</Button>
+              </Link>
+              <Link to="/login">
+                <Button variant="outline">Login</Button>
+              </Link>
             </div>
           ) : (
             <Button onClick={logoutHandler} variant="destructive">

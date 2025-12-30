@@ -7,23 +7,49 @@ import cloudinary from "../utils/cloud.js";
 // register
 export const register = async (req, res) => {
   try {
-    const { fullname, email, phoneNumber, password, role } = req.body;
-    console.log(fullname, email, phoneNumber, password, role);
-    if (!fullname || !email || !phoneNumber || !password || !role) {
+    const { fullname, email, phoneNumber, password, adharcard, pancard, role } =
+      req.body;
+
+    if (
+      !fullname ||
+      !email ||
+      !phoneNumber ||
+      !password ||
+      !role ||
+      !pancard ||
+      !adharcard
+    ) {
       return res
         .status(400)
         .json({ message: "All fields are required", success: false });
     }
 
     // email
-    const file = req.file
-    const fileUri = getDataUri(file)
-    const cloudResponse = await cloudinary.uploader.upload(fileUri.content)
+    const file = req.file;
+    const fileUri = getDataUri(file);
+    const cloudResponse = await cloudinary.uploader.upload(fileUri.content);
+
     const user = await User.findOne({ email });
     if (user) {
       return res
         .status(400)
         .json({ message: "Email already exists", success: false });
+    }
+
+    const existingAdharcard = await User.findOne({ adharcard });
+    if (existingAdharcard) {
+      return res.status(400).json({
+        message: "Adhar number already exists",
+        success: false,
+      });
+    }
+
+    const existingPancard = await User.findOne({ pancard });
+    if (existingPancard) {
+      return res.status(400).json({
+        message: "Pan number already exists",
+        success: false,
+      });
     }
 
     // convert password to hashed
@@ -32,21 +58,21 @@ export const register = async (req, res) => {
       fullname,
       email,
       phoneNumber,
+      adharcard,
+      pancard,
       password: hashedPassword,
       role,
-      profile:{
-        profilePhoto:cloudResponse.secure_url,
-      }
+      profile: {
+        profilePhoto: cloudResponse.secure_url,
+      },
     });
 
     await newuser.save();
 
-    return res
-      .status(200)
-      .json({
-        message: `Account created successfully ${fullname}`,
-        success: true,
-      });
+    return res.status(200).json({
+      message: `Account created successfully ${fullname}`,
+      success: true,
+    });
   } catch (error) {
     console.log(error);
   }
@@ -134,7 +160,9 @@ export const updateProfile = async (req, res) => {
 
     // cloudinary upload
     const fileUri = getDataUri(file);
-    const cloudinaryResponse = await cloudinary.uploader.upload(fileUri.content);
+    const cloudinaryResponse = await cloudinary.uploader.upload(
+      fileUri.content
+    );
 
     let skillsArray;
     if (skills) {
@@ -153,7 +181,7 @@ export const updateProfile = async (req, res) => {
     if (email) user.email = email;
     if (phoneNumber) user.phoneNumber = phoneNumber;
     if (bio) user.profile.bio = bio;
-    if (skills) user.profile.skills = skillsArray 
+    if (skills) user.profile.skills = skillsArray;
     if (cloudinaryResponse) {
       user.profile.resume = cloudinaryResponse.secure_url;
       user.profile.resumeOriginalname = file.originalname;

@@ -19,6 +19,8 @@ const Register = () => {
     password: "",
     role: "",
     phoneNumber: "",
+    pancard: "",
+    adharcard: "",
     file: null,
   });
 
@@ -50,6 +52,8 @@ const Register = () => {
     formData.append("fullname", input.fullname);
     formData.append("email", input.email);
     formData.append("password", input.password);
+    formData.append("pancard", input.pancard);
+    formData.append("adharcard", input.adharcard);
     formData.append("role", input.role);
     formData.append("phoneNumber", input.phoneNumber || "");
     if (input.file) formData.append("file", input.file);
@@ -66,7 +70,8 @@ const Register = () => {
         navigate("/login");
       }
     } catch (error) {
-      const errorMessage = error.response?.data?.message || "Registration failed";
+      const errorMessage =
+        error.response?.data?.message || "Registration failed";
       toast.error(errorMessage);
     } finally {
       dispatch(setLoading(false));
@@ -125,6 +130,30 @@ const Register = () => {
             />
           </div>
 
+          {/* Pancard */}
+          <div className="space-y-1 mb-4">
+            <Label>PAN Card Number</Label>
+            <Input
+              type="text"
+              value={input.pancard}
+              name="pancard"
+              onChange={changeEventHandler}
+              placeholder="ABCDEF1234G"
+            ></Input>
+          </div>
+
+          {/* Adharcard */}
+          <div className="space-y-1 mb-4">
+            <Label>Adhar Card Number</Label>
+            <Input
+              type="text"
+              value={input.adharcard}
+              name="adharcard"
+              onChange={changeEventHandler}
+              placeholder="123456789012"
+            ></Input>
+          </div>
+
           {/* Phone */}
           <div className="space-y-1 mb-4">
             <Label>Phone Number</Label>
@@ -142,7 +171,10 @@ const Register = () => {
             <Label className="block mb-2">Register as</Label>
             <RadioGroup className="flex gap-6">
               {["Student", "Recruiter"].map((role) => (
-                <label key={role} className="flex items-center gap-2 cursor-pointer">
+                <label
+                  key={role}
+                  className="flex items-center gap-2 cursor-pointer"
+                >
                   <input
                     type="radio"
                     name="role"
@@ -169,14 +201,25 @@ const Register = () => {
           </div>
 
           {/* Submit Button */}
-          <Button className="w-full py-3 my-3 flex items-center justify-center" type="submit" disabled={loading}>
-            {loading ? <Loader2 className="h-5 w-5 animate-spin mr-2" /> : "Register"}
+          <Button
+            className="w-full py-3 my-3 flex items-center justify-center"
+            type="submit"
+            disabled={loading}
+          >
+            {loading ? (
+              <Loader2 className="h-5 w-5 animate-spin mr-2" />
+            ) : (
+              "Register"
+            )}
           </Button>
 
           {/* Login link */}
           <p className="text-center text-sm text-gray-500 mt-4">
             Already have an account?{" "}
-            <Link to="/login" className="text-blue-600 hover:underline font-medium">
+            <Link
+              to="/login"
+              className="text-blue-600 hover:underline font-medium"
+            >
               Login
             </Link>
           </p>
