@@ -19,8 +19,6 @@ const Register = () => {
     password: "",
     role: "",
     phoneNumber: "",
-    pancard: "",
-    adharcard: "",
     file: null,
   });
 
@@ -52,8 +50,6 @@ const Register = () => {
     formData.append("fullname", input.fullname);
     formData.append("email", input.email);
     formData.append("password", input.password);
-    formData.append("pancard", input.pancard);
-    formData.append("adharcard", input.adharcard);
     formData.append("role", input.role);
     formData.append("phoneNumber", input.phoneNumber || "");
     if (input.file) formData.append("file", input.file);
@@ -128,30 +124,6 @@ const Register = () => {
               placeholder="Enter your password"
               required
             />
-          </div>
-
-          {/* Pancard */}
-          <div className="space-y-1 mb-4">
-            <Label>PAN Card Number</Label>
-            <Input
-              type="text"
-              value={input.pancard}
-              name="pancard"
-              onChange={changeEventHandler}
-              placeholder="ABCDEF1234G"
-            ></Input>
-          </div>
-
-          {/* Adharcard */}
-          <div className="space-y-1 mb-4">
-            <Label>Adhar Card Number</Label>
-            <Input
-              type="text"
-              value={input.adharcard}
-              name="adharcard"
-              onChange={changeEventHandler}
-              placeholder="123456789012"
-            ></Input>
           </div>
 
           {/* Phone */}

@@ -7,7 +7,7 @@ import cloudinary from "../utils/cloud.js";
 // register
 export const register = async (req, res) => {
   try {
-    const { fullname, email, phoneNumber, password, adharcard, pancard, role } =
+    const { fullname, email, phoneNumber, password, role } =
       req.body;
 
     if (
@@ -15,9 +15,7 @@ export const register = async (req, res) => {
       !email ||
       !phoneNumber ||
       !password ||
-      !role ||
-      !pancard ||
-      !adharcard
+      !role 
     ) {
       return res
         .status(400)
@@ -36,30 +34,12 @@ export const register = async (req, res) => {
         .json({ message: "Email already exists", success: false });
     }
 
-    const existingAdharcard = await User.findOne({ adharcard });
-    if (existingAdharcard) {
-      return res.status(400).json({
-        message: "Adhar number already exists",
-        success: false,
-      });
-    }
-
-    const existingPancard = await User.findOne({ pancard });
-    if (existingPancard) {
-      return res.status(400).json({
-        message: "Pan number already exists",
-        success: false,
-      });
-    }
-
     // convert password to hashed
     const hashedPassword = await bcrypt.hash(password, 10);
     const newuser = new User({
       fullname,
       email,
       phoneNumber,
-      adharcard,
-      pancard,
       password: hashedPassword,
       role,
       profile: {
