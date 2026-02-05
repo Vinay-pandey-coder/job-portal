@@ -19,9 +19,16 @@ app.use(cookieParser());
 // cors
 
 const corsOptions = {
-  origin: true,
+  origin: [
+    "http://localhost:5173",
+    "http://localhost:3000",
+    "https://job-portal-uora.onrender.com", // agar frontend vercel pe hai
+  ],
   credentials: true,
 };
+
+app.use(cors(corsOptions));
+
 
 app.use(cors(corsOptions));
 
