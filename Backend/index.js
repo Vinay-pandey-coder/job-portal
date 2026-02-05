@@ -19,11 +19,9 @@ app.use(cookieParser());
 // cors
 
 const corsOptions = {
-  origin: [
-    "http://localhost:5173",
-    "http://localhost:3000",
-    "https://job-portal-uora.onrender.com", // agar frontend vercel pe hai
-  ],
+    origin: [
+      "https://job-port1.netlify.app"
+    ],
   credentials: true,
 };
 
